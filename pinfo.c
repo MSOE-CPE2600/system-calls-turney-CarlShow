@@ -1,3 +1,12 @@
+/*
+
+finfo.c
+A program designed to print the process components to the user
+Carl Show
+November 3rd, 2025
+
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -8,7 +17,7 @@
 
 int main(int argc, char* argv[])
 {
-    int willCont = 0;
+    int willCont = 0; // Did we get the process
     pid_t pid;
     if(argc > 1)
     {

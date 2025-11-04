@@ -1,3 +1,12 @@
+/*
+
+finfo.c
+A program designed to print the file components to the user
+Carl Show
+November 3rd, 2025
+
+*/
+
 #include <sys/stat.h>
 #include <stdio.h>
 #include <string.h>
@@ -5,7 +14,7 @@
 
 int main(int argc, char* argv[])
 {
-    int willCont = 0;
+    int willCont = 0; // Did we get the file?
     struct stat target;
     if(argc > 1)
     {
@@ -37,22 +46,20 @@ int main(int argc, char* argv[])
             sprintf(generalBuffer, "unknown");
         }
         printf("File is %s\n", generalBuffer);
-        int runner = (target.st_mode >> 16)&15;
-        if(runner == 7)
-        {
-            printf("User has full permissions over file\n");
-        }
+        printf("User may ");
+        if(target.st_mode & S_IRUSR)
+            printf("r");
         else
-        {
-            printf("User may ");
-            if(runner&&1)
-                printf("excecute, ");
-            if(runner&&2)
-                printf("read, ");
-            if(runner&&4)
-                printf("write");
-            printf("\n");
-        }
+            printf("-");
+        if(target.st_mode & S_IWUSR)
+            printf("w");
+        else
+            printf("-");
+        if(target.st_mode & S_IXUSR)
+            printf("x");
+        else
+            printf("-");
+        printf("\n");
         printf("User number %d is the owner of this file\n", target.st_uid);
         printf("File is %li bytes in size\n", target.st_size);
         strftime(generalBuffer, 100, "%D, %T", localtime(&target.st_mtim.tv_sec));
