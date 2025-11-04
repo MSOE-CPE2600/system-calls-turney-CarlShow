@@ -1,9 +1,12 @@
-// Name, etc
+#include <unistd.h>
+#include <time.h>
+#include <stdio.h>
 
-// pmod.c
-
-int main(int argc, char* argv[])
+int main()
 {
-
+    nice(10);
+    struct timespec t = {1, 837272638};
+    nanosleep(&t, NULL);
+    printf("Task has finished\n");
     return 0;
 }

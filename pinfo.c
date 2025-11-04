@@ -1,9 +1,50 @@
-// Name, etc
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <sched.h>
+#include <sys/resource.h>
 
-// pinfo.c
 
 int main(int argc, char* argv[])
 {
-
-    return 0;
+    int willCont = 0;
+    pid_t pid;
+    if(argc > 1)
+    {
+        if(getpgid(strtoul(argv[1], NULL, 10)) > -1)
+        {
+            pid = strtoul(argv[1], NULL, 10);
+            willCont = 1;
+        }
+        else
+            printf("Target PID does not exist\n");
+    }
+    else
+    {
+        printf("No target specified, defaulting to this process...\n");
+        pid = getpid();
+        willCont = 1;
+    }
+    if(willCont == 1)
+    {
+        printf("Priority: %i\n", 20 + getpriority(0, pid));
+        char tempSched[50];
+        switch(sched_getscheduler(pid))
+        {
+            case 0: 
+                strcpy(tempSched, "Round-Robin standard");
+            break;
+            case 1: 
+                strcpy(tempSched, "Batched");
+            break;
+            case 2: 
+                strcpy(tempSched, "Idling");
+            break;
+            default: 
+                strcpy(tempSched, "Unknown");
+            break;
+        }
+        printf("Schedule: %s\n", tempSched);
+    }
 }
